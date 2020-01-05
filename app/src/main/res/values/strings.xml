@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Nohtes-Real</string>
+
+    <!-- add note -->
+    <string name="add_note_toolbar_title">Add note</string>
+    <string name="add_note_error">An error occurred</string>
+    <string name="add_note_success">Note saved successfully!</string>
+    <string name="add_note_menu_label">Add label</string>
+    <string name="add_note_menu_save">Save</string>
+</resources>
