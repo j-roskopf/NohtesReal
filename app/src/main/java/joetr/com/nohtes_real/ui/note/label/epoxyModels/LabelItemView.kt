@@ -28,7 +28,7 @@ abstract class LabelItemView : EpoxyModelWithHolder<LabelItemViewHolder>() {
             holder.labelItemCheck.performClick()
         }
         holder.labelItemCheck.setOnClickListener {
-            actionHandler(LabelAction.LabelClicked(labelEntity))
+            actionHandler(LabelAction.LabelClicked(labelEntity.copy(checked = !holder.labelItemCheck.isChecked)))
         }
     }
 

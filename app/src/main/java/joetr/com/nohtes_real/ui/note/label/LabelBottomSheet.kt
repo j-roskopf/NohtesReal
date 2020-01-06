@@ -26,7 +26,6 @@ class LabelBottomSheet : BaseBottomSheetDialogFragment() {
 
     lateinit var labels : List<LabelEntity>
 
-
     private fun handle(action: LabelAction) {
         when(action) {
             is LabelAction.LabelClicked -> {

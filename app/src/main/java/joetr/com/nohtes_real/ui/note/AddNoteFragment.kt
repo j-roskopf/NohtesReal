@@ -5,7 +5,6 @@ import android.view.*
 import android.widget.Button
 import android.widget.ImageButton
 import androidx.annotation.StringRes
-import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -30,6 +29,8 @@ import javax.inject.Inject
 
 
 class AddNoteFragment : BaseFragment(), LabelInteraction {
+
+    // todo joe enable view binding
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -226,6 +227,9 @@ class AddNoteFragment : BaseFragment(), LabelInteraction {
                 layoutInflater.inflate(R.layout.add_note_chip, addNoteChipGroup, false) as Chip
 
             chip.text = it.label
+            chip.setOnClickListener {
+                labelBottomSheet.show(childFragmentManager, LabelBottomSheet.TAG)
+            }
             addNoteChipGroup.addView(chip)
         }
     }
