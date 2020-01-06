@@ -5,6 +5,7 @@ import android.view.*
 import android.widget.Button
 import android.widget.ImageButton
 import androidx.annotation.StringRes
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -37,7 +38,7 @@ class AddNoteFragment : BaseFragment(), LabelInteraction {
 
     private val labelBottomSheet = LabelBottomSheet()
 
-    private val chipLabels = listOf<Chip>()
+    val chipMap : Map<LabelEntity, Boolean> = HashMap()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -218,13 +219,14 @@ class AddNoteFragment : BaseFragment(), LabelInteraction {
     override fun labelClicked(label: LabelEntity) {
         viewModel.toggleLabel(label)
 
-        addNoteChipGroup.removeView(chip.)
+        addNoteChipGroup.removeAllViews()
 
+        viewModel.labels.filter { it.checked }.forEach {
+            val chip =
+                layoutInflater.inflate(R.layout.add_note_chip, addNoteChipGroup, false) as Chip
 
-
-        val chip = layoutInflater.inflate(R.layout.add_note_chip, addNoteChipGroup, false) as Chip
-        chip.text = label.label
-        addNoteChipGroup.addView(chip)
-        chipLabels.a
+            chip.text = it.label
+            addNoteChipGroup.addView(chip)
+        }
     }
 }
