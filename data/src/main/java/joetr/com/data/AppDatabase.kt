@@ -1,17 +1,21 @@
 package joetr.com.data
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types.newParameterizedType
 import joetr.com.data.dao.LabelDao
 import joetr.com.data.dao.NoteDao
 import joetr.com.data.entities.LabelEntity
 import joetr.com.data.entities.NoteEntity
+import java.lang.reflect.ParameterizedType
 import java.util.concurrent.Executors
 
+
 @Database(entities = [NoteEntity::class, LabelEntity::class], version = 1)
+@TypeConverters(LabelEntityArrayTypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun noteDao(): NoteDao
@@ -59,4 +63,24 @@ private val IO_EXECUTOR = Executors.newSingleThreadExecutor()
  */
 fun ioThread(f: () -> Unit) {
     IO_EXECUTOR.execute(f)
+}
+
+class LabelEntityArrayTypeConverter {
+    private val moshi: Moshi = Moshi.Builder().build()
+    private val listMyData: ParameterizedType = newParameterizedType(
+        MutableList::class.java,
+        LabelEntity::class.java
+    )
+    private val adapter: JsonAdapter<List<LabelEntity>> = moshi.adapter(listMyData)
+
+
+    @TypeConverter
+    fun fromString(value: String): List<LabelEntity>? {
+        return adapter.fromJson(value)
+    }
+
+    @TypeConverter
+    fun fromArrayList(list: List<LabelEntity>): String {
+        return adapter.toJson(list)
+    }
 }

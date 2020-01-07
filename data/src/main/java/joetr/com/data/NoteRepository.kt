@@ -16,4 +16,9 @@ class NoteRepository @Inject constructor(private val noteDao: NoteDao) {
             .subscribeOn(Schedulers.io())
     }
 
+    fun getAll(): Maybe<List<NoteEntity>> {
+        return noteDao.getAll()
+            .subscribeOn(Schedulers.io())
+    }
+
 }

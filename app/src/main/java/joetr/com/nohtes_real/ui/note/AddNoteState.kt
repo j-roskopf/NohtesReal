@@ -7,6 +7,5 @@ sealed class AddNoteState {
 
 sealed class AddNoteAction {
     object Error : AddNoteAction()
-    object InsertNote : AddNoteAction()
     object NoteAddedSuccessfully : AddNoteAction()
 }

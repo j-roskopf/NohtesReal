@@ -21,5 +21,11 @@
     <fragment
         android:id="@+id/addNoteFragment"
         android:name="joetr.com.nohtes_real.ui.note.AddNoteFragment"
-        android:label="@string/add_note_toolbar_title" />
+        android:label="@string/add_note_toolbar_title" >
+        <argument
+            android:name="note"
+            app:argType="joetr.com.data.entities.NoteEntity"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
 </navigation>

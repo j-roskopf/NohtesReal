@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/noteItemBaseLayout"
+    android:layout_margin="8dp"
+    android:background="@drawable/border"
+    android:maxHeight="164dp"
+    android:foreground="?attr/selectableItemBackgroundBorderless"
+    tools:ignore="UnusedAttribute">
+
+    <com.github.irshulx.Editor
+        android:id="@+id/noteItemEditor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:focusable="false"
+        app:layout_constraintVertical_bias="0"
+        app:auto_focus="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:render_type="Renderer" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

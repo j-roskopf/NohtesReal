@@ -6,6 +6,7 @@ import dagger.Binds
 import dagger.MapKey
 import dagger.Module
 import dagger.multibindings.IntoMap
+import joetr.com.nohtes_real.ui.main.MainViewModel
 import joetr.com.nohtes_real.ui.note.AddNoteViewModel
 import javax.inject.Inject
 import javax.inject.Provider
@@ -32,4 +33,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(AddNoteViewModel::class)
     internal abstract fun addToNoteViewModel(viewModel: AddNoteViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(MainViewModel::class)
+    internal abstract fun mainViewModel(viewModel: MainViewModel): ViewModel
 }

@@ -1,6 +1,5 @@
 package joetr.com.nohtes_real.ui.note
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -27,29 +26,16 @@ class AddNoteViewModel @Inject constructor(
 
     private val compositeDisposable = CompositeDisposable()
 
-    var labels: ArrayList<LabelEntity> = arrayListOf()
+    var allLabels: ArrayList<LabelEntity> = arrayListOf()
 
     fun getLabels() {
         compositeDisposable += getLabelsUseCase.getAll()
             .subscribe({ list ->
                 if (list.isNotEmpty()) {
-                    labels = ArrayList(list)
+                    allLabels = ArrayList(list)
                 }
             }, {
                 Timber.e(it)
-            })
-    }
-
-    fun insertNote(noteEntity: NoteEntity) {
-        compositeDisposable += addToNoteUseCase.insertNote(noteEntity)
-            .subscribe({
-                if (it >= 0) {
-                    action.onNext(AddNoteAction.NoteAddedSuccessfully)
-                } else {
-                    action.onNext(AddNoteAction.Error)
-                }
-            }, {
-                action.onNext(AddNoteAction.Error)
             })
     }
 
@@ -59,10 +45,41 @@ class AddNoteViewModel @Inject constructor(
     }
 
     fun toggleLabel(label: LabelEntity) {
-        val index = labels.indexOfFirst { it.label == label.label }
-        Log.d("D","joeDebug index = $index")
-        if (index >= 0 && index <= labels.size - 1) {
-            labels[index] = labels[index].copy(checked = !label.checked)
+        val index = allLabels.indexOfFirst { it.label == label.label }
+        if (index >= 0 && index <= allLabels.size - 1) {
+            allLabels[index] = allLabels[index].copy(checked = !label.checked)
+        }
+    }
+
+    fun saveNote(contentAsHTML: String, noteEntity: NoteEntity?) {
+        val checkedLabels = allLabels.filter { it.checked }
+        val noteEntityToSave = noteEntity?.copy(content = contentAsHTML, labels = checkedLabels)
+            ?: NoteEntity(
+                id = 0,
+                content = contentAsHTML,
+                timestamp = System.currentTimeMillis(),
+                labels = checkedLabels
+            )
+        compositeDisposable += addToNoteUseCase.insertNote(
+            noteEntityToSave
+        ).subscribe({
+            if (it > 0) {
+                action.onNext(AddNoteAction.NoteAddedSuccessfully)
+            } else {
+                action.onNext(AddNoteAction.Error)
+            }
+        }, {
+            action.onNext(AddNoteAction.NoteAddedSuccessfully)
+            Timber.e(it)
+        })
+    }
+
+    fun addTags(noteEntity: NoteEntity) {
+        noteEntity.labels?.forEach { noteLabel ->
+            val index = allLabels.indexOfFirst { it.label == noteLabel.label }
+            if(index >= 0) {
+                allLabels[index].checked = true
+            }
         }
     }
 }

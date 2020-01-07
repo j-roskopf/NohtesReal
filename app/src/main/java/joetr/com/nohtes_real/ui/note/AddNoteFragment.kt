@@ -20,6 +20,7 @@ import joetr.com.data.entities.NoteEntity
 import joetr.com.nohtes_real.R
 import joetr.com.nohtes_real.android.base.BaseFragment
 import joetr.com.nohtes_real.android.extensions.exhaustive
+import joetr.com.nohtes_real.android.extensions.hideKeyboard
 import joetr.com.nohtes_real.di.component.FragmentComponent
 import joetr.com.nohtes_real.ui.note.label.LabelBottomSheet
 import joetr.com.nohtes_real.ui.note.label.LabelInteraction
@@ -27,6 +28,7 @@ import kotlinx.android.synthetic.main.add_note_fragment.*
 import timber.log.Timber
 import javax.inject.Inject
 
+const val NOTE_ARG = "note"
 
 class AddNoteFragment : BaseFragment(), LabelInteraction {
 
@@ -39,10 +41,15 @@ class AddNoteFragment : BaseFragment(), LabelInteraction {
 
     private val labelBottomSheet = LabelBottomSheet()
 
-    val chipMap : Map<LabelEntity, Boolean> = HashMap()
+    private var noteEntity: NoteEntity? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+
+        // todo joe add color picker and image support
+
         viewModel = ViewModelProviders.of(this, viewModelFactory)[AddNoteViewModel::class.java]
 
         viewModel.getLabels()
@@ -74,23 +81,15 @@ class AddNoteFragment : BaseFragment(), LabelInteraction {
             AddNoteAction.Error -> {
                 displaySnackBar(R.string.add_note_error)
             }
-            AddNoteAction.InsertNote -> {
-                viewModel.insertNote(createNoteEntity())
-            }
             AddNoteAction.NoteAddedSuccessfully -> {
                 displaySnackBar(R.string.add_note_success)
             }
         }.exhaustive
     }
 
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.add_note_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    private fun createNoteEntity(): NoteEntity {
-        return NoteEntity(0, "", System.currentTimeMillis())
     }
 
     private fun displaySnackBar(@StringRes message: Int) {
@@ -113,6 +112,10 @@ class AddNoteFragment : BaseFragment(), LabelInteraction {
             R.id.addNoteLabel -> {
                 labelBottomSheet.show(childFragmentManager, LabelBottomSheet.TAG)
             }
+            R.id.addNoteSave -> {
+                hideKeyboard()
+                viewModel.saveNote(editor.contentAsHTML, noteEntity)
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -121,10 +124,21 @@ class AddNoteFragment : BaseFragment(), LabelInteraction {
         super.onViewCreated(view, savedInstanceState)
 
         setupEditor(view)
+
+        if(arguments?.containsKey(NOTE_ARG) == true) { noteEntity = arguments?.getParcelable(NOTE_ARG)!!
+            editor.render(noteEntity!!.content)
+            displayTagsIfExist(noteEntity!!)
+        } else {
+            editor.render()
+        }
+    }
+
+    private fun displayTagsIfExist(noteEntity: NoteEntity) {
+        viewModel.addTags(noteEntity)
+        displayChips()
     }
 
     private fun setupEditor(view: View) {
-
         val editor = view.findViewById(R.id.editor) as Editor
 
         view.findViewById<Button>(R.id.action_h1).setOnClickListener {
@@ -203,8 +217,6 @@ class AddNoteFragment : BaseFragment(), LabelInteraction {
                 EditorTextStyle.BLOCKQUOTE
             )
         }
-
-        editor.render()
     }
 
     override fun onAttachFragment(childFragment: Fragment) {
@@ -212,7 +224,7 @@ class AddNoteFragment : BaseFragment(), LabelInteraction {
         when(childFragment) {
             is LabelBottomSheet -> {
                 childFragment.labelInteraction = this
-                childFragment.labels = viewModel.labels
+                childFragment.labels = viewModel.allLabels
             }
         }
     }
@@ -222,7 +234,11 @@ class AddNoteFragment : BaseFragment(), LabelInteraction {
 
         addNoteChipGroup.removeAllViews()
 
-        viewModel.labels.filter { it.checked }.forEach {
+        displayChips()
+    }
+
+    private fun displayChips() {
+        viewModel.allLabels.filter { it.checked }.forEach {
             val chip =
                 layoutInflater.inflate(R.layout.add_note_chip, addNoteChipGroup, false) as Chip
 

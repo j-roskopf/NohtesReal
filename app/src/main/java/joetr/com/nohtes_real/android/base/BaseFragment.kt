@@ -10,7 +10,7 @@ import joetr.com.nohtes_real.di.component.FragmentComponent
 import joetr.com.nohtes_real.di.module.FragmentModule
 
 
-abstract class BaseFragment : Fragment() , DaggerFragmentAware {
+abstract class BaseFragment : Fragment(), DaggerFragmentAware {
 
     protected val compositeDisposable = CompositeDisposable()
 
@@ -28,7 +28,7 @@ abstract class BaseFragment : Fragment() , DaggerFragmentAware {
 
     override fun onPause() {
         super.onPause()
-        compositeDisposable.dispose()
+        compositeDisposable.clear()
     }
 
     override fun onDestroy() {
