@@ -5,7 +5,7 @@
     android:id="@+id/noteItemBaseLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_margin="4dp"
     android:background="@drawable/border"
     android:foreground="?attr/selectableItemBackgroundBorderless"
     tools:ignore="UnusedAttribute">
@@ -13,18 +13,21 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/noteItemEditorContainer"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintHeight_max="300dp"
-        app:layout_constrainedHeight="true"
+        android:maxHeight="148dp"
+        tools:layout_height="148dp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@id/noteItemChipGroup"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_default="wrap"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.github.irshulx.Editor
+            tools:layout_height="148dp"
             android:id="@+id/noteItemEditor"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            app:layout_constraintVertical_bias="0.0"
+            android:layout_height="wrap_content"
             app:auto_focus="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -32,12 +35,13 @@
             app:layout_constraintTop_toTopOf="parent"
             app:render_type="Renderer" />
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <com.google.android.material.chip.ChipGroup
+        android:layout_marginTop="16dp"
         android:id="@+id/noteItemChipGroup"
+        app:layout_constraintTop_toBottomOf="@+id/noteItemEditorContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
