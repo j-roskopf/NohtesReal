@@ -1,5 +1,6 @@
 package joetr.com.nohtes_real.ui.note
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
 import androidx.annotation.StringRes
@@ -22,16 +23,20 @@ import joetr.com.nohtes_real.di.component.FragmentComponent
 import joetr.com.nohtes_real.ui.note.label.LabelBottomSheet
 import joetr.com.nohtes_real.ui.note.label.LabelInteraction
 import kotlinx.android.synthetic.main.add_note_fragment.*
+import kotlinx.android.synthetic.main.link_input_dialog.view.*
 import timber.log.Timber
+import xute.markdeditor.EditorControlBar
 import xute.markdeditor.Styles.TextComponentStyle.NORMAL
 import xute.markdeditor.models.DraftModel
 import javax.inject.Inject
 
 const val NOTE_ARG = "note"
 
-class AddNoteFragment : BaseFragment(), LabelInteraction {
+class AddNoteFragment : BaseFragment(), LabelInteraction, EditorControlBar.EditorControlListener {
 
     // todo joe enable view binding
+    // todo joe add links
+    // todo joe add images
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -46,8 +51,6 @@ class AddNoteFragment : BaseFragment(), LabelInteraction {
         super.onCreate(savedInstanceState)
 
         requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
-
-        // todo joe add color picker and image support
 
         viewModel = ViewModelProviders.of(this, viewModelFactory)[AddNoteViewModel::class.java]
 
@@ -122,7 +125,7 @@ class AddNoteFragment : BaseFragment(), LabelInteraction {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupEditor(view)
+        setupEditor()
     }
 
     private fun displayTagsIfExist(noteEntity: NoteEntity) {
@@ -130,8 +133,9 @@ class AddNoteFragment : BaseFragment(), LabelInteraction {
         displayChips()
     }
 
-    private fun setupEditor(view: View) {
+    private fun setupEditor() {
         editor.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.borderColor))
+        controlBar.setEditorControlListener(this)
         controlBar.setEditor(editor)
 
         if(arguments?.containsKey(NOTE_ARG) == true) { noteEntity = arguments?.getParcelable(NOTE_ARG)!!
@@ -175,5 +179,33 @@ class AddNoteFragment : BaseFragment(), LabelInteraction {
             }
             addNoteChipGroup.addView(chip)
         }
+    }
+
+    override fun onInsertImageClicked() {
+        //todo joe add image
+    }
+
+    override fun onInserLinkClicked() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+
+        val inflater: LayoutInflater = LayoutInflater.from(context)
+        val dialogView: View = inflater.inflate(R.layout.link_input_dialog, null)
+        builder.setView(dialogView)
+
+
+        val dialog: AlertDialog = builder.create()
+
+        // todo joe make display as link
+        dialogView.linkAddButton.setOnClickListener {
+            val linkName = dialogView.linkName.text.toString()
+            val linkUrl = dialogView.linkUrl.text.toString()
+            if(linkName.isNotEmpty() && linkUrl.isNotEmpty()) {
+                editor.addLink(linkName, linkUrl)
+            } else {
+                displaySnackBar(R.string.add_note_empty_link_error)
+            }
+        }
+
+        dialog.show()
     }
 }

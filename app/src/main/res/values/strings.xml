@@ -9,4 +9,8 @@
     <string name="main_menu_labell">Toggle Night Mode</string>
     <string name="add_note_menu_save">Save</string>
     <string name="main_error">Something went horribly horribly wrong and I\'m terribly terribly sorry.</string>
+    <string name="add_note_link_text">Link text</string>
+    <string name="add_note_link_url">Link url</string>
+    <string name="add_note_add">Add</string>
+    <string name="add_note_empty_link_error">Please enter valid text</string>
 </resources>

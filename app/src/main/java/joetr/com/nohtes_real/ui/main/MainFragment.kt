@@ -1,11 +1,7 @@
 package joetr.com.nohtes_real.ui.main
 
-import android.content.res.Resources
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.*
-import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -21,7 +17,6 @@ import io.reactivex.schedulers.Schedulers
 import joetr.com.nohtes_real.R
 import joetr.com.nohtes_real.android.base.BaseFragment
 import joetr.com.nohtes_real.android.extensions.exhaustive
-import joetr.com.nohtes_real.android.util.ColorUtils
 import joetr.com.nohtes_real.di.component.FragmentComponent
 import joetr.com.nohtes_real.ui.note.NOTE_ARG
 import kotlinx.android.synthetic.main.main_fragment.*
@@ -56,9 +51,15 @@ class MainFragment : BaseFragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.main_menu, menu)
 
-        // This demonstrates how to programmatically tint a drawable
         val item: MenuItem = menu.findItem(R.id.toggleTheme)
-        val drawableWrap: Drawable = DrawableCompat.wrap(item.icon).mutate()
+        var drawableWrap = DrawableCompat.wrap(item.icon).mutate()
+
+        drawableWrap = if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_sun)!!
+        } else {
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_moon)!!
+        }
+
         DrawableCompat.setTint(drawableWrap, ContextCompat.getColor(requireContext(), R.color.iconColor))
         item.icon = drawableWrap
         super.onCreateOptionsMenu(menu, inflater)
