@@ -1,9 +1,14 @@
 package joetr.com.nohtes_real.ui.main
 
+import android.content.res.Resources
+import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.TypedValue
+import android.view.*
+import androidx.annotation.ColorInt
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -16,11 +21,13 @@ import io.reactivex.schedulers.Schedulers
 import joetr.com.nohtes_real.R
 import joetr.com.nohtes_real.android.base.BaseFragment
 import joetr.com.nohtes_real.android.extensions.exhaustive
+import joetr.com.nohtes_real.android.util.ColorUtils
 import joetr.com.nohtes_real.di.component.FragmentComponent
 import joetr.com.nohtes_real.ui.note.NOTE_ARG
 import kotlinx.android.synthetic.main.main_fragment.*
 import timber.log.Timber
 import javax.inject.Inject
+
 
 class MainFragment : BaseFragment() {
 
@@ -40,10 +47,35 @@ class MainFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        setHasOptionsMenu(true)
         return inflater.inflate(R.layout.main_fragment, container, false)
     }
 
     override fun injectSelf(component: FragmentComponent) = component.inject(this)
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.main_menu, menu)
+
+        // This demonstrates how to programmatically tint a drawable
+        val item: MenuItem = menu.findItem(R.id.toggleTheme)
+        val drawableWrap: Drawable = DrawableCompat.wrap(item.icon).mutate()
+        DrawableCompat.setTint(drawableWrap, ContextCompat.getColor(requireContext(), R.color.iconColor))
+        item.icon = drawableWrap
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id: Int = item.itemId
+        return if (id == R.id.toggleTheme) {
+            // toggle theme
+            if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            }
+            true
+        } else super.onOptionsItemSelected(item)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

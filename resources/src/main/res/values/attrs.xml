@@ -4,4 +4,5 @@
     <attr name="primaryCardBackgroundColor" format="color"/>
     <attr name="enabledEditorIconColor" format="color"/>
     <attr name="disabledEditorIconColor" format="color"/>
+    <attr name="menuColor" format="reference"/>
 </resources>

@@ -18,6 +18,7 @@
         <item name="primaryCardBackgroundColor">@color/primaryCardBackgroundColor</item>
         <item name="enabledEditorIconColor">@color/enabledEditorIconColor</item>
         <item name="disabledEditorIconColor">@color/disabledEditorIconColor</item>
+        <item name="menuColor">@color/primaryCardBackgroundColor</item>
         <item name="editTextStyle">@style/CustomEditText</item>
     </style>
 

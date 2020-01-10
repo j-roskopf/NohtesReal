@@ -23,7 +23,6 @@ abstract class BaseActivity : AppCompatActivity(), DaggerActivityAware {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         super.onCreate(savedInstanceState)
         injectSelf(component)
     }

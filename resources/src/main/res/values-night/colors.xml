@@ -10,4 +10,5 @@
     <color name="enabledEditorIconColor">#64B5F6</color>
     <color name="disabledEditorIconColor">#B3FFFFFF</color>
     <color name="textColor">#B3FFFFFF</color>
+    <color name="iconColor">#FFFFFF</color>
 </resources>
