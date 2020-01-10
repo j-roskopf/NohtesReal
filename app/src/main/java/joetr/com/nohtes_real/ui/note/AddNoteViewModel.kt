@@ -11,6 +11,7 @@ import joetr.com.data.entities.NoteEntity
 import joetr.com.nohtes_real.ui.note.label.useCase.GetLabelsUseCase
 import joetr.com.nohtes_real.ui.note.useCase.AddNoteUseCase
 import timber.log.Timber
+import xute.markdeditor.models.DraftModel
 import javax.inject.Inject
 
 class AddNoteViewModel @Inject constructor(
@@ -51,12 +52,16 @@ class AddNoteViewModel @Inject constructor(
         }
     }
 
-    fun saveNote(contentAsHTML: String, noteEntity: NoteEntity?) {
+    fun saveNote(content: DraftModel, markDown: String, noteEntity: NoteEntity?) {
+        if(content.items == null) return
+
         val checkedLabels = allLabels.filter { it.checked }
-        val noteEntityToSave = noteEntity?.copy(content = contentAsHTML, labels = checkedLabels)
+
+        val noteEntityToSave = noteEntity?.copy(draftContent = content.items!!, markDown = markDown, labels = checkedLabels)
             ?: NoteEntity(
                 id = 0,
-                content = contentAsHTML,
+                markDown = markDown,
+                draftContent = content.items!!,
                 timestamp = System.currentTimeMillis(),
                 labels = checkedLabels
             )

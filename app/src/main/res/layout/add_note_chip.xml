@@ -6,9 +6,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_margin="4dp"
     tools:text="Add tag"
-    android:textColor="@color/white"
+    android:textColor="@android:color/white"
     android:theme="@style/Theme.MaterialComponents.Light"
     app:chipBackgroundColor="@color/colorPrimary"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
-    app:rippleColor="@color/colorPrimaryDark" />
+    app:rippleColor="@color/colorPrimary" />

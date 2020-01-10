@@ -38,6 +38,9 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(":data")
+    implementation project(":markdeditor")
+    implementation project(":resources")
+
     // kotlin
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
@@ -88,8 +91,6 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$navVersion"
     implementation "androidx.navigation:navigation-ui-ktx:$navVersion"
 
-    // rich text editor
-    implementation 'com.github.irshulx:laser-native-editor:3.0.3'
 
     // mark down viewer
     implementation "io.noties.markwon:core:4.2.0"

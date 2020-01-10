@@ -30,6 +30,8 @@ android {
 dependencies {
     //todo joe make it so modules have same dependencies
 
+    implementation project(":markdeditor")
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     testImplementation 'junit:junit:4.12'

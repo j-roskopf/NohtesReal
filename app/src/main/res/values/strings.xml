@@ -6,6 +6,7 @@
     <string name="add_note_error">An error occurred</string>
     <string name="add_note_success">Note saved successfully!</string>
     <string name="add_note_menu_label">Add label</string>
+    <string name="main_menu_labell">Toggle Night Mode</string>
     <string name="add_note_menu_save">Save</string>
     <string name="main_error">Something went horribly horribly wrong and I\'m terribly terribly sorry.</string>
 </resources>

@@ -5,6 +5,7 @@
     android:id="@+id/addNoteBaseLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/primaryBackgroundColor"
     android:layout_marginTop="?attr/actionBarSize"
     android:orientation="vertical"
     tools:context=".MainActivity">
@@ -17,46 +18,40 @@
         android:orientation="vertical"
         tools:context=".MainActivity">
 
-        <HorizontalScrollView
-            android:id="@+id/tools"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#e6e6e6"
-            android:scrollbars="none"
+        <xute.markdeditor.EditorControlBar
+            android:id="@+id/controlBar"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <include layout="@layout/editor_toolbar_linearlayout_horizontal" />
-
-        </HorizontalScrollView>
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:background="@color/primaryBackgroundColor"
             android:scrollbars="vertical"
             app:layout_constraintBottom_toTopOf="@+id/addNoteChipGroup"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tools">
+            app:layout_constraintTop_toBottomOf="@+id/controlBar">
 
-            <com.github.irshulx.Editor
+            <xute.markdeditor.MarkDEditor
                 android:id="@+id/editor"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingStart="8dp"
-                app:placeholder="Start writing here..."
-                app:render_type="Editor" />
+                android:layout_height="wrap_content" />
 
         </ScrollView>
+
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/addNoteChipGroup"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_margin="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_height="wrap_content">
+            app:layout_constraintEnd_toEndOf="parent">
 
 
         </com.google.android.material.chip.ChipGroup>

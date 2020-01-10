@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#64B5F6</color> <!-- Blue 300 -->
+    <color name="colorPrimaryDark">#64B5F6</color> <!-- Blue 300 -->
+    <color name="colorAccent">#2e7d32</color><!-- Orange 200 -->
+    <color name="error">#Ef9A9A</color> <!-- Red 200 -->
+    <color name="primaryBackgroundColor">#303030</color>
+    <color name="primaryCardBackgroundColor">#424242</color>
+    <color name="borderColor">#D3D3D3</color>
+    <color name="enabledEditorIconColor">#64B5F6</color>
+    <color name="disabledEditorIconColor">#B3FFFFFF</color>
+    <color name="textColor">#B3FFFFFF</color>
+</resources>

@@ -13,39 +13,40 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/noteItemEditorContainer"
         android:layout_width="match_parent"
-        android:maxHeight="148dp"
-        tools:layout_height="148dp"
         android:layout_height="wrap_content"
+        android:maxHeight="148dp"
         app:layout_constraintBottom_toTopOf="@id/noteItemChipGroup"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_default="wrap"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_height="148dp">
 
-        <com.github.irshulx.Editor
-            tools:layout_height="148dp"
+        <TextView
             android:id="@+id/noteItemEditor"
             android:layout_width="match_parent"
-            app:layout_constraintVertical_bias="0.0"
             android:layout_height="wrap_content"
-            app:auto_focus="false"
+            android:textColor="@color/textColor"
+            android:background="?selectableItemBackgroundBorderless"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:render_type="Renderer" />
+            app:layout_constraintVertical_bias="0.0"
+            tools:layout_height="148dp" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <com.google.android.material.chip.ChipGroup
-        android:layout_marginTop="16dp"
         android:id="@+id/noteItemChipGroup"
-        app:layout_constraintTop_toBottomOf="@+id/noteItemEditorContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/noteItemEditorContainer">
 
 
     </com.google.android.material.chip.ChipGroup>

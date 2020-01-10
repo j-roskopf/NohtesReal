@@ -10,12 +10,13 @@ import joetr.com.data.dao.LabelDao
 import joetr.com.data.dao.NoteDao
 import joetr.com.data.entities.LabelEntity
 import joetr.com.data.entities.NoteEntity
+import xute.markdeditor.datatype.DraftDataItemModel
 import java.lang.reflect.ParameterizedType
 import java.util.concurrent.Executors
 
 
 @Database(entities = [NoteEntity::class, LabelEntity::class], version = 1)
-@TypeConverters(LabelEntityArrayTypeConverter::class)
+@TypeConverters(LabelEntityArrayTypeConverter::class, DraftModelItemArrayTypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun noteDao(): NoteDao
@@ -81,6 +82,26 @@ class LabelEntityArrayTypeConverter {
 
     @TypeConverter
     fun fromArrayList(list: List<LabelEntity>): String {
+        return adapter.toJson(list)
+    }
+}
+
+class DraftModelItemArrayTypeConverter {
+    private val moshi: Moshi = Moshi.Builder().build()
+    private val listMyData: ParameterizedType = newParameterizedType(
+        MutableList::class.java,
+        DraftDataItemModel::class.java
+    )
+    private val adapter: JsonAdapter<List<DraftDataItemModel>> = moshi.adapter(listMyData)
+
+
+    @TypeConverter
+    fun fromString(value: String): List<DraftDataItemModel>? {
+        return adapter.fromJson(value)
+    }
+
+    @TypeConverter
+    fun fromArrayList(list: List<DraftDataItemModel>): String {
         return adapter.toJson(list)
     }
 }

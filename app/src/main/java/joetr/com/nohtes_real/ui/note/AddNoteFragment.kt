@@ -2,14 +2,11 @@ package joetr.com.nohtes_real.ui.note
 
 import android.os.Bundle
 import android.view.*
-import android.widget.Button
-import android.widget.ImageButton
 import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import com.github.irshulx.Editor
-import com.github.irshulx.models.EditorTextStyle
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -26,6 +23,8 @@ import joetr.com.nohtes_real.ui.note.label.LabelBottomSheet
 import joetr.com.nohtes_real.ui.note.label.LabelInteraction
 import kotlinx.android.synthetic.main.add_note_fragment.*
 import timber.log.Timber
+import xute.markdeditor.Styles.TextComponentStyle.NORMAL
+import xute.markdeditor.models.DraftModel
 import javax.inject.Inject
 
 const val NOTE_ARG = "note"
@@ -114,7 +113,7 @@ class AddNoteFragment : BaseFragment(), LabelInteraction {
             }
             R.id.addNoteSave -> {
                 hideKeyboard()
-                viewModel.saveNote(editor.contentAsHTML, noteEntity)
+                viewModel.saveNote(editor.draft, editor.markdownContent, noteEntity)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -124,13 +123,6 @@ class AddNoteFragment : BaseFragment(), LabelInteraction {
         super.onViewCreated(view, savedInstanceState)
 
         setupEditor(view)
-
-        if(arguments?.containsKey(NOTE_ARG) == true) { noteEntity = arguments?.getParcelable(NOTE_ARG)!!
-            editor.render(noteEntity!!.content)
-            displayTagsIfExist(noteEntity!!)
-        } else {
-            editor.render()
-        }
     }
 
     private fun displayTagsIfExist(noteEntity: NoteEntity) {
@@ -139,82 +131,17 @@ class AddNoteFragment : BaseFragment(), LabelInteraction {
     }
 
     private fun setupEditor(view: View) {
-        val editor = view.findViewById(R.id.editor) as Editor
+        editor.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.borderColor))
+        controlBar.setEditor(editor)
 
-        view.findViewById<Button>(R.id.action_h1).setOnClickListener {
-            editor.updateTextStyle(
-                EditorTextStyle.H1
-            )
-        }
-
-        view.findViewById<Button>(R.id.action_h2).setOnClickListener {
-            editor.updateTextStyle(
-                EditorTextStyle.H2
-            )
-        }
-
-        view.findViewById<Button>(R.id.action_h3).setOnClickListener {
-            editor.updateTextStyle(
-                EditorTextStyle.H3
-            )
-        }
-
-        view.findViewById<ImageButton>(R.id.action_bold).setOnClickListener {
-            editor.updateTextStyle(
-                EditorTextStyle.BOLD
-            )
-        }
-
-        view.findViewById<ImageButton>(R.id.action_Italic).setOnClickListener {
-            editor.updateTextStyle(
-                EditorTextStyle.ITALIC
-            )
-        }
-
-        view.findViewById<ImageButton>(R.id.action_indent).setOnClickListener {
-            editor.updateTextStyle(
-                EditorTextStyle.INDENT
-            )
-        }
-
-        view.findViewById<ImageButton>(R.id.action_outdent).setOnClickListener {
-            editor.updateTextStyle(
-                EditorTextStyle.OUTDENT
-            )
-        }
-
-        view.findViewById<ImageButton>(R.id.action_bulleted).setOnClickListener {
-            editor.insertList(
-                false
-            )
-        }
-
-        view.findViewById<ImageButton>(R.id.action_color).setOnClickListener {
-            editor.updateTextColor(
-                "#FF3333"
-            )
-        }
-
-        view.findViewById<ImageButton>(R.id.action_unordered_numbered).setOnClickListener {
-            editor.insertList(
-                true
-            )
-        }
-
-        view.findViewById<ImageButton>(R.id.action_hr).setOnClickListener { editor.insertDivider() }
-
-        view.findViewById<ImageButton>(R.id.action_insert_image)
-            .setOnClickListener { editor.openImagePicker() }
-
-        view.findViewById<ImageButton>(R.id.action_insert_link)
-            .setOnClickListener { editor.insertLink() }
-
-        view.findViewById<ImageButton>(R.id.action_erase)
-            .setOnClickListener { editor.clearAllContents() }
-
-        view.findViewById<ImageButton>(R.id.action_blockquote).setOnClickListener {
-            editor.updateTextStyle(
-                EditorTextStyle.BLOCKQUOTE
+        if(arguments?.containsKey(NOTE_ARG) == true) { noteEntity = arguments?.getParcelable(NOTE_ARG)!!
+            editor.loadDraft(DraftModel(items = noteEntity!!.draftContent))
+            displayTagsIfExist(noteEntity!!)
+        } else {
+            editor.configureEditor(
+                false,
+                "Start Here...",
+                NORMAL
             )
         }
     }

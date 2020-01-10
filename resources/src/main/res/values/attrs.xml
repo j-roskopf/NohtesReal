@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="primaryBackgroundColor" format="color"/>
+    <attr name="primaryCardBackgroundColor" format="color"/>
+    <attr name="enabledEditorIconColor" format="color"/>
+    <attr name="disabledEditorIconColor" format="color"/>
+</resources>

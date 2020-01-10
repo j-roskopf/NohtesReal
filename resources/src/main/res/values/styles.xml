@@ -1,0 +1,38 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <!-- Light application theme. -->
+    <style name="AppTheme.Base.Light" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="primaryBackgroundColor">@color/primaryBackgroundColor</item>
+        <item name="primaryCardBackgroundColor">@color/primaryCardBackgroundColor</item>
+        <item name="enabledEditorIconColor">@color/enabledEditorIconColor</item>
+        <item name="disabledEditorIconColor">@color/disabledEditorIconColor</item>
+        <item name="editTextStyle">@style/CustomEditText</item>
+    </style>
+
+    <style name="CustomEditText" parent="@android:style/Widget.EditText">
+        <item name="android:editTextColor">@android:color/black</item>
+    </style>
+
+</resources>
+
+
+
+
+    <!--        <item name="primaryTitleColor">@color/primaryTitleColor</item>
+            <item name="primaryDescriptionColor">@color/primaryDescriptionColor</item>
+            <item name="primaryDateColor">@color/primaryDateColor</item>
+            <item name="primaryBackgroundColor">@color/primaryBackgroundColor</item>
+            <item name="primaryCardBackgroundColor">@color/primaryCardBackgroundColor</item>
+            <item name="iconBookmark">@drawable/ic_bookmark_green</item>-->
