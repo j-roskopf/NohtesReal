@@ -8,7 +8,7 @@
     tools:text="Add tag"
     android:textColor="@android:color/white"
     android:theme="@style/Theme.MaterialComponents.Light"
-    app:chipBackgroundColor="@color/colorPrimary"
+    app:chipBackgroundColor="@color/chipColor"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
-    app:rippleColor="@color/colorPrimary" />
+    app:rippleColor="@color/chipColor" />

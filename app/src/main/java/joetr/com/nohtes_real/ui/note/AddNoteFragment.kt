@@ -1,9 +1,12 @@
 package joetr.com.nohtes_real.ui.note
 
 import android.app.AlertDialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.*
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -49,6 +52,13 @@ class AddNoteFragment : BaseFragment(), LabelInteraction, EditorControlBar.Edito
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // avoid white flash of fragment transition in dark mode
+        if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+            requireActivity().window.setBackgroundDrawable(ColorDrawable(Color.BLACK))
+        } else {
+            requireActivity().window.setBackgroundDrawable(ColorDrawable(Color.WHITE))
+        }
 
         requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
 
@@ -201,6 +211,7 @@ class AddNoteFragment : BaseFragment(), LabelInteraction, EditorControlBar.Edito
             val linkUrl = dialogView.linkUrl.text.toString()
             if(linkName.isNotEmpty() && linkUrl.isNotEmpty()) {
                 editor.addLink(linkName, linkUrl)
+                dialog.dismiss()
             } else {
                 displaySnackBar(R.string.add_note_empty_link_error)
             }

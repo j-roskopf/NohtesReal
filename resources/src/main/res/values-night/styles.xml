@@ -12,14 +12,13 @@
         <item name="enabledEditorIconColor">@color/enabledEditorIconColor</item>
         <item name="disabledEditorIconColor">@color/disabledEditorIconColor</item>
         <item name="menuColor">@color/primaryCardBackgroundColor</item>
-        <item name="editTextStyle">@style/CustomEditText</item>
+        <item name="android:windowBackground">@android:color/black</item>
     </style>
 
-    <style name="CustomEditText" parent="@android:style/Widget.EditText">
-        <item name="android:editTextColor">@android:color/white</item>
-        <item name="android:backgroundTint">@android:color/white</item>
-        <item name="android:textColorHint">#acacac</item>
+    <style name="LabelIconStyle">
+        <item name="android:src">@drawable/ic_label_outline_white_24dp</item>
     </style>
+
 </resources>
 
 

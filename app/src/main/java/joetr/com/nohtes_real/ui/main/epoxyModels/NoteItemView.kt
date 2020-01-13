@@ -2,7 +2,7 @@ package joetr.com.nohtes_real.ui.main.epoxyModels
 
 import android.view.LayoutInflater
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.cardview.widget.CardView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
@@ -65,6 +65,6 @@ abstract class NoteItemView : EpoxyModelWithHolder<NoteItemViewHolder>() {
 
 class NoteItemViewHolder : KotlinEpoxyHolder() {
     val noteItemEditor by bind<TextView>(R.id.noteItemEditor)
-    val noteItemBaseLayout by bind<ConstraintLayout>(R.id.noteItemBaseLayout)
+    val noteItemBaseLayout by bind<CardView>(R.id.noteItemBaseLayout)
     val noteItemChipGroup by bind<ChipGroup>(R.id.noteItemChipGroup)
 }

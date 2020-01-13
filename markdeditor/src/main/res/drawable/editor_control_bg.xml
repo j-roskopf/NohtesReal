@@ -5,7 +5,7 @@
     <size
         android:width="10dp"
         android:height="10dp" />
-    <solid android:color="@color/primaryCardBackgroundColor" />
-    <stroke android:color="@color/primaryCardBackgroundColor" android:width="1dp"/>
+    <solid android:color="@color/primaryBackgroundColor" />
+    <stroke android:color="@color/primaryBackgroundColor" android:width="1dp"/>
 
 </shape>

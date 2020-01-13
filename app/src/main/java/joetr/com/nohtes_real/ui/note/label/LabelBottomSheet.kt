@@ -1,9 +1,11 @@
 package joetr.com.nohtes_real.ui.note.label
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import joetr.com.data.entities.LabelEntity
@@ -25,6 +27,15 @@ class LabelBottomSheet : BaseBottomSheetDialogFragment() {
     lateinit var labelInteraction: LabelInteraction
 
     lateinit var labels : List<LabelEntity>
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState)
+        if (dialog.window != null) {
+            dialog.window!!.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+            dialog.setCancelable(false)
+        }
+        return dialog
+    }
 
     private fun handle(action: LabelAction) {
         when(action) {

@@ -82,11 +82,11 @@ class EditorControlBar : FrameLayout, EditorFocusReporter {
     }
 
     private fun attachListeners() {
-        normalTextBtn!!.setOnClickListener {
+        normalTextBtn.setOnClickListener {
             mEditor!!.setHeading(TextComponentStyle.NORMAL)
             invalidateStates(TextComponentItem.MODE_PLAIN, TextComponentStyle.NORMAL)
         }
-        headingBtn!!.setOnClickListener {
+        headingBtn.setOnClickListener {
             if (currentHeading == MAX_HEADING) {
                 currentHeading = 1
                 mEditor!!.setHeading(currentHeading)
@@ -95,7 +95,7 @@ class EditorControlBar : FrameLayout, EditorFocusReporter {
             }
             invalidateStates(TextComponentItem.MODE_PLAIN, currentHeading)
         }
-        bulletBtn!!.setOnClickListener {
+        bulletBtn.setOnClickListener {
             if (olEnabled) { //switch to normal
                 mEditor!!.setHeading(TextComponentStyle.NORMAL)
                 invalidateStates(TextComponentItem.MODE_PLAIN, TextComponentStyle.NORMAL)
@@ -113,22 +113,22 @@ class EditorControlBar : FrameLayout, EditorFocusReporter {
                 olEnabled = false
             }
         }
-        blockQuoteBtn!!.setOnClickListener {
+        blockQuoteBtn.setOnClickListener {
             if (blockquoteEnabled) { //switch to normal
                 mEditor!!.setHeading(TextComponentStyle.NORMAL)
                 invalidateStates(TextComponentItem.MODE_PLAIN, TextComponentStyle.NORMAL)
-            } else { //blockquote
+            } else { // block quote
                 mEditor!!.changeToBlockquote()
                 invalidateStates(TextComponentItem.MODE_PLAIN, TextComponentStyle.BLOCKQUOTE)
             }
         }
-        hrBtn!!.setOnClickListener { mEditor!!.insertHorizontalDivider() }
-        linkBtn!!.setOnClickListener {
+        hrBtn.setOnClickListener { mEditor!!.insertHorizontalDivider() }
+        linkBtn.setOnClickListener {
             if (editorControlListener != null) {
                 editorControlListener!!.onInserLinkClicked()
             }
         }
-        imageBtn!!.setOnClickListener {
+        imageBtn.setOnClickListener {
             if (editorControlListener != null) {
                 editorControlListener!!.onInsertImageClicked()
             }
@@ -137,23 +137,23 @@ class EditorControlBar : FrameLayout, EditorFocusReporter {
 
     private fun enableNormalText(enabled: Boolean) {
         if (enabled) {
-            normalTextBtn!!.setTextColor(enabledColor)
+            normalTextBtn.setTextColor(enabledColor)
         } else {
-            normalTextBtn!!.setTextColor(disabledColor)
+            normalTextBtn.setTextColor(disabledColor)
         }
     }
 
     private fun enableHeading(enabled: Boolean, headingNumber: Int) {
         if (enabled) {
             currentHeading = headingNumber
-            headingBtn!!.setTextColor(enabledColor)
-            headingNumberBtn!!.setTextColor(enabledColor)
-            headingNumberBtn!!.text = headingNumber.toString()
+            headingBtn.setTextColor(enabledColor)
+            headingNumberBtn.setTextColor(enabledColor)
+            headingNumberBtn.text = headingNumber.toString()
         } else {
             currentHeading = 0
-            headingBtn!!.setTextColor(disabledColor)
-            headingNumberBtn!!.setTextColor(disabledColor)
-            headingNumberBtn!!.text = "1"
+            headingBtn.setTextColor(disabledColor)
+            headingNumberBtn.setTextColor(disabledColor)
+            headingNumberBtn.text = "1"
         }
     }
 
@@ -180,9 +180,9 @@ class EditorControlBar : FrameLayout, EditorFocusReporter {
     private fun enableBlockquote(enable: Boolean) {
         blockquoteEnabled = enable
         if (enable) {
-            blockQuoteBtn!!.setColorFilter(enabledColor)
+            blockQuoteBtn.setColorFilter(enabledColor)
         } else {
-            blockQuoteBtn!!.setColorFilter(disabledColor)
+            blockQuoteBtn.setColorFilter(disabledColor)
         }
     }
 
@@ -198,41 +198,49 @@ class EditorControlBar : FrameLayout, EditorFocusReporter {
             enableNormalText(false)
             enableBullet(true, false)
         } else if (mode == TextComponentItem.MODE_PLAIN) {
-            if (textComponentStyle == TextComponentStyle.H1) {
-                enableBlockquote(false)
-                enableHeading(true, 1)
-                enableNormalText(false)
-                enableBullet(false, false)
-            } else if (textComponentStyle == TextComponentStyle.H2) {
-                enableBlockquote(false)
-                enableHeading(true, 2)
-                enableNormalText(false)
-                enableBullet(false, false)
-            } else if (textComponentStyle == TextComponentStyle.H3) {
-                enableBlockquote(false)
-                enableHeading(true, 3)
-                enableNormalText(false)
-                enableBullet(false, false)
-            } else if (textComponentStyle == TextComponentStyle.H4) {
-                enableBlockquote(false)
-                enableHeading(true, 4)
-                enableNormalText(false)
-                enableBullet(false, false)
-            } else if (textComponentStyle == TextComponentStyle.H5) {
-                enableBlockquote(false)
-                enableHeading(true, 5)
-                enableNormalText(false)
-                enableBullet(false, false)
-            } else if (textComponentStyle == TextComponentStyle.BLOCKQUOTE) {
-                enableBlockquote(true)
-                enableHeading(false, 1)
-                enableNormalText(false)
-                enableBullet(false, false)
-            } else if (textComponentStyle == TextComponentStyle.NORMAL) {
-                enableBlockquote(false)
-                enableHeading(false, 1)
-                enableNormalText(true)
-                enableBullet(false, false)
+            when (textComponentStyle) {
+                TextComponentStyle.H1 -> {
+                    enableBlockquote(false)
+                    enableHeading(true, 1)
+                    enableNormalText(false)
+                    enableBullet(false, false)
+                }
+                TextComponentStyle.H2 -> {
+                    enableBlockquote(false)
+                    enableHeading(true, 2)
+                    enableNormalText(false)
+                    enableBullet(false, false)
+                }
+                TextComponentStyle.H3 -> {
+                    enableBlockquote(false)
+                    enableHeading(true, 3)
+                    enableNormalText(false)
+                    enableBullet(false, false)
+                }
+                TextComponentStyle.H4 -> {
+                    enableBlockquote(false)
+                    enableHeading(true, 4)
+                    enableNormalText(false)
+                    enableBullet(false, false)
+                }
+                TextComponentStyle.H5 -> {
+                    enableBlockquote(false)
+                    enableHeading(true, 5)
+                    enableNormalText(false)
+                    enableBullet(false, false)
+                }
+                TextComponentStyle.BLOCKQUOTE -> {
+                    enableBlockquote(true)
+                    enableHeading(false, 1)
+                    enableNormalText(false)
+                    enableBullet(false, false)
+                }
+                TextComponentStyle.NORMAL -> {
+                    enableBlockquote(false)
+                    enableHeading(false, 1)
+                    enableNormalText(true)
+                    enableBullet(false, false)
+                }
             }
         }
     }

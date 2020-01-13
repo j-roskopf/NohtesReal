@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
+import joetr.com.nohtes_real.NIGHT_MODE_KEY
 import joetr.com.nohtes_real.R
 import joetr.com.nohtes_real.android.base.BaseFragment
 import joetr.com.nohtes_real.android.extensions.exhaustive
@@ -70,8 +71,10 @@ class MainFragment : BaseFragment() {
         return if (id == R.id.toggleTheme) {
             // toggle theme
             if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+                sharedPreferences.edit().putBoolean(NIGHT_MODE_KEY, false).apply()
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             } else {
+                sharedPreferences.edit().putBoolean(NIGHT_MODE_KEY, true).apply()
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             }
             true

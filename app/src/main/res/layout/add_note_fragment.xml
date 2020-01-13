@@ -5,7 +5,7 @@
     android:id="@+id/addNoteBaseLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primaryBackgroundColor"
+    android:background="@color/primaryCardBackgroundColor"
     android:layout_marginTop="?attr/actionBarSize"
     android:orientation="vertical"
     tools:context=".MainActivity">
@@ -30,7 +30,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@color/primaryBackgroundColor"
+            android:background="@color/primaryCardBackgroundColor"
             android:scrollbars="vertical"
             app:layout_constraintBottom_toTopOf="@+id/addNoteChipGroup"
             app:layout_constraintEnd_toEndOf="parent"
