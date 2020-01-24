@@ -1,13 +1,10 @@
 package joetr.com.nohtes_real.ui.note
 
-import androidx.lifecycle.ViewModel
-import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.PublishSubject
 import joetr.com.data.entities.LabelEntity
 import joetr.com.data.entities.NoteEntity
+import joetr.com.nohtes_real.android.base.BaseViewModel
+import joetr.com.nohtes_real.ui.note.label.dataModels.LabelItem
 import joetr.com.nohtes_real.ui.note.label.useCase.GetLabelsUseCase
 import joetr.com.nohtes_real.ui.note.useCase.AddNoteUseCase
 import timber.log.Timber
@@ -17,45 +14,32 @@ import javax.inject.Inject
 class AddNoteViewModel @Inject constructor(
     private val addToNoteUseCase: AddNoteUseCase,
     private val getLabelsUseCase: GetLabelsUseCase
-) : ViewModel() {
+) : BaseViewModel<AddNoteState, AddNoteAction>() {
 
-    private val state: BehaviorSubject<AddNoteState> = BehaviorSubject.create()
-    fun state(): Observable<AddNoteState> = state.hide()
-
-    private val action: PublishSubject<AddNoteAction> = PublishSubject.create()
-    fun action(): Observable<AddNoteAction> = action.hide()
-
-    private val compositeDisposable = CompositeDisposable()
-
-    var allLabels: ArrayList<LabelEntity> = arrayListOf()
+    var userEnteredLabels: ArrayList<LabelEntity> = arrayListOf()
 
     fun getLabels() {
         compositeDisposable += getLabelsUseCase.getAll()
             .subscribe({ list ->
                 if (list.isNotEmpty()) {
-                    allLabels = ArrayList(list)
+                    userEnteredLabels = ArrayList(list)
                 }
             }, {
                 Timber.e(it)
             })
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        compositeDisposable.dispose()
-    }
-
     fun toggleLabel(label: LabelEntity) {
-        val index = allLabels.indexOfFirst { it.label == label.label }
-        if (index >= 0 && index <= allLabels.size - 1) {
-            allLabels[index] = allLabels[index].copy(checked = !label.checked)
+        val index = userEnteredLabels.indexOfFirst { it.label == label.label }
+        if (index >= 0 && index <= userEnteredLabels.size - 1) {
+            userEnteredLabels[index] = userEnteredLabels[index].copy(checked = !label.checked)
         }
     }
 
     fun saveNote(content: DraftModel, markDown: String, noteEntity: NoteEntity?) {
         if(content.items == null) return
 
-        val checkedLabels = allLabels.filter { it.checked }
+        val checkedLabels = userEnteredLabels.filter { it.checked }
 
         val noteEntityToSave = noteEntity?.copy(draftContent = content.items!!, markDown = markDown, labels = checkedLabels)
             ?: NoteEntity(
@@ -81,10 +65,25 @@ class AddNoteViewModel @Inject constructor(
 
     fun addTags(noteEntity: NoteEntity) {
         noteEntity.labels?.forEach { noteLabel ->
-            val index = allLabels.indexOfFirst { it.label == noteLabel.label }
+            val index = userEnteredLabels.indexOfFirst { it.label == noteLabel.label }
             if(index >= 0) {
-                allLabels[index].checked = true
+                userEnteredLabels[index].checked = true
             }
         }
+    }
+
+    fun getLabelsForBottomSheet(): List<LabelItem> {
+        return listOf(LabelItem.AddNewLabelItem(LabelEntity("add new", false))).plus(userEnteredLabels.map {
+            LabelItem.UserEnteredLabelItem(it)
+        })
+    }
+
+    fun addLabel(label: LabelEntity) {
+        userEnteredLabels.add(label)
+    }
+
+    fun deleteLabel(label: LabelEntity) {
+        userEnteredLabels.remove(label)
+        print("test")
     }
 }

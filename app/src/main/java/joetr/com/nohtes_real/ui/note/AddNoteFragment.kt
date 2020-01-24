@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -88,6 +89,7 @@ class AddNoteFragment : BaseFragment(), LabelInteraction, EditorControlBar.Edito
         }.exhaustive
     }
 
+    @Suppress("IMPLICIT_CAST_TO_ANY")
     private fun handle(addNoteAction: AddNoteAction) {
         when (addNoteAction) {
             AddNoteAction.Error -> {
@@ -95,6 +97,7 @@ class AddNoteFragment : BaseFragment(), LabelInteraction, EditorControlBar.Edito
             }
             AddNoteAction.NoteAddedSuccessfully -> {
                 displaySnackBar(R.string.add_note_success)
+                NavHostFragment.findNavController(this).popBackStack()
             }
         }.exhaustive
     }
@@ -165,7 +168,7 @@ class AddNoteFragment : BaseFragment(), LabelInteraction, EditorControlBar.Edito
         when(childFragment) {
             is LabelBottomSheet -> {
                 childFragment.labelInteraction = this
-                childFragment.labels = viewModel.allLabels
+                childFragment.labels = viewModel.getLabelsForBottomSheet()
             }
         }
     }
@@ -178,8 +181,16 @@ class AddNoteFragment : BaseFragment(), LabelInteraction, EditorControlBar.Edito
         displayChips()
     }
 
+    override fun labelAdded(label: LabelEntity) {
+        viewModel.addLabel(label)
+    }
+
+    override fun labelDeleted(label: LabelEntity) {
+        viewModel.deleteLabel(label)
+    }
+
     private fun displayChips() {
-        viewModel.allLabels.filter { it.checked }.forEach {
+        viewModel.userEnteredLabels.filter { it.checked }.forEach {
             val chip =
                 layoutInflater.inflate(R.layout.add_note_chip, addNoteChipGroup, false) as Chip
 
@@ -201,7 +212,6 @@ class AddNoteFragment : BaseFragment(), LabelInteraction, EditorControlBar.Edito
         val inflater: LayoutInflater = LayoutInflater.from(context)
         val dialogView: View = inflater.inflate(R.layout.link_input_dialog, null)
         builder.setView(dialogView)
-
 
         val dialog: AlertDialog = builder.create()
 

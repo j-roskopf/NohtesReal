@@ -19,12 +19,18 @@
         <item name="enabledEditorIconColor">@color/enabledEditorIconColor</item>
         <item name="disabledEditorIconColor">@color/disabledEditorIconColor</item>
         <item name="menuColor">@color/primaryCardBackgroundColor</item>
-        <item name="android:windowBackground">@android:color/black</item>
+        <item name="android:windowBackground">@color/primaryBackgroundColor</item>
     </style>
 
     <style name="LabelIconStyle">
         <item name="android:src">@drawable/ic_label_outline_black_24dp</item>
     </style>
+
+    <style name="AddLabelIconStyle">
+        <item name="android:src">@drawable/ic_add_box_black_24dp</item>
+    </style>
+
+    <style name="DayNightAlertDialog" parent="Theme.AppCompat.DayNight.Dialog.Alert"/>
 
 </resources>
 

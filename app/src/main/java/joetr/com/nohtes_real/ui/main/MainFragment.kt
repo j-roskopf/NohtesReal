@@ -10,6 +10,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
@@ -20,6 +22,8 @@ import joetr.com.nohtes_real.android.base.BaseFragment
 import joetr.com.nohtes_real.android.extensions.exhaustive
 import joetr.com.nohtes_real.di.component.FragmentComponent
 import joetr.com.nohtes_real.ui.note.NOTE_ARG
+import joetr.com.swipereveal.SwipeToLeftCallback
+import joetr.com.swipereveal.SwipeToRightCallback
 import kotlinx.android.synthetic.main.main_fragment.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -53,9 +57,8 @@ class MainFragment : BaseFragment() {
         inflater.inflate(R.menu.main_menu, menu)
 
         val item: MenuItem = menu.findItem(R.id.toggleTheme)
-        var drawableWrap = DrawableCompat.wrap(item.icon).mutate()
 
-        drawableWrap = if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+        val drawableWrap = if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
             ContextCompat.getDrawable(requireContext(), R.drawable.ic_sun)!!
         } else {
             ContextCompat.getDrawable(requireContext(), R.drawable.ic_moon)!!
@@ -84,6 +87,17 @@ class MainFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        mainRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy > 0) {
+                    mainAddButton.hide()
+                } else {
+                    mainAddButton.show()
+                }
+                super.onScrolled(recyclerView, dx, dy)
+            }
+        })
+
         mainRecyclerView.adapter = controller.adapter
         mainRecyclerView.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
@@ -99,12 +113,33 @@ class MainFragment : BaseFragment() {
 
         handle(MainPageAction.GetAllNotes)
 
-        // todo joe display tag on main
-
-        // joe todo hide fab on RV scroll
         mainAddButton.setOnClickListener {
             it.findNavController().navigate(R.id.action_mainFragment_to_addNoteFragment)
         }
+
+        val deleteIcon = if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+            R.drawable.ic_delete_white_24dp
+        } else {
+            R.drawable.ic_delete_black_24dp
+        }
+
+        // swiping both directions will delete
+        val swipeToLeftCallback = object : SwipeToLeftCallback(requireContext(), deleteIcon, android.R.color.transparent) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                viewModel.deleteItemAtPosition(viewHolder.adapterPosition)
+            }
+        }
+        val swipeToRightCallback = object : SwipeToRightCallback(requireContext(), deleteIcon, android.R.color.transparent) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                viewModel.deleteItemAtPosition(viewHolder.adapterPosition)
+            }
+        }
+
+        val swipeToLeftItemTouchHelper = ItemTouchHelper(swipeToLeftCallback)
+        swipeToLeftItemTouchHelper.attachToRecyclerView(mainRecyclerView)
+
+        val swipeToRightItemTouchHelper = ItemTouchHelper(swipeToRightCallback)
+        swipeToRightItemTouchHelper.attachToRecyclerView(mainRecyclerView)
     }
 
     private fun handle(action : MainPageAction) {
@@ -129,6 +164,21 @@ class MainFragment : BaseFragment() {
             is MainPageState.Content -> {
                 controller.setData(state.data, ::handle)
                 mainBaseLayout.displayedChild = R.id.mainContentContainer
+
+                // show the RV
+                mainRecyclerView.visibility = View.VISIBLE
+
+                // hide empty content
+                emptyContentContainer.visibility = View.GONE
+            }
+            MainPageState.Empty -> {
+                mainBaseLayout.displayedChild = R.id.mainContentContainer
+
+                // hide the RV
+                mainRecyclerView.visibility = View.GONE
+
+                // display empty content
+                emptyContentContainer.visibility = View.VISIBLE
             }
         }.exhaustive
     }

@@ -10,7 +10,10 @@
     <string name="add_note_menu_save">Save</string>
     <string name="main_error">Something went horribly horribly wrong and I\'m terribly terribly sorry.</string>
     <string name="add_note_link_text">Link text</string>
+    <string name="add_note_label_text">Label</string>
     <string name="add_note_link_url">Link url</string>
     <string name="add_note_add">Add</string>
     <string name="add_note_empty_link_error">Please enter valid text</string>
+    <string name="empty_note">You don\'t have any notes! Try adding some</string>
+    <string name="add_new_label">Add new label</string>
 </resources>

@@ -98,4 +98,8 @@ dependencies {
     // epoxy
     implementation 'com.airbnb.android:epoxy:3.9.0'
     kapt 'com.airbnb.android:epoxy-processor:3.9.0'
+
+    implementation 'com.github.j-roskopf:SwipeToReveal:1.0'
+
+    implementation 'com.airbnb.android:lottie:3.3.1'
 }

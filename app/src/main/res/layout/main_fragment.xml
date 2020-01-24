@@ -4,10 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainBaseLayout"
     android:layout_width="match_parent"
+    android:background="@color/primaryBackgroundColor"
     android:layout_height="match_parent"
     android:layout_marginTop="?attr/actionBarSize"
     android:orientation="vertical"
     tools:context=".MainActivity">
+
 
     <!-- Content -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,6 +28,39 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/emptyContentContainer"
+            android:layout_width="match_parent"
+            android:background="@color/primaryBackgroundColor"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context=".MainActivity">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottieAnimationView"
+                android:layout_width="248dp"
+                android:layout_height="248dp"
+                android:layout_marginTop="16dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lottie_autoPlay="true"
+                app:lottie_fileName="empty_box.json"
+                app:lottie_loop="true" />
+
+            <TextView
+                android:layout_margin="16dp"
+                android:layout_width="wrap_content"
+                android:textColor="@color/textColor"
+                android:layout_height="wrap_content"
+                android:text="@string/empty_note"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lottieAnimationView" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/mainAddButton"

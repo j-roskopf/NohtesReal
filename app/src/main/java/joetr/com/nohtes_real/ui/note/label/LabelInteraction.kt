@@ -4,4 +4,6 @@ import joetr.com.data.entities.LabelEntity
 
 interface LabelInteraction {
     fun labelClicked(label: LabelEntity)
+    fun labelAdded(label: LabelEntity)
+    fun labelDeleted(label: LabelEntity)
 }

@@ -6,9 +6,7 @@ import joetr.com.data.entities.NoteEntity
 import javax.inject.Inject
 
 class GetNotesUseCase @Inject constructor(private val noteRepository: NoteRepository) {
-
     fun getAll(): Maybe<List<NoteEntity>> {
         return noteRepository.getAll()
     }
-
 }

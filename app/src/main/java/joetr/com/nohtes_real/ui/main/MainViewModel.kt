@@ -1,38 +1,46 @@
 package joetr.com.nohtes_real.ui.main
 
-import androidx.lifecycle.ViewModel
-import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
+import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.PublishSubject
 import joetr.com.data.entities.NoteEntity
+import joetr.com.nohtes_real.android.base.BaseViewModel
 import timber.log.Timber
 import javax.inject.Inject
 
-class MainViewModel @Inject constructor(private val getNotesUseCase: GetNotesUseCase) : ViewModel() {
+class MainViewModel @Inject constructor(private val getNotesUseCase: GetNotesUseCase, private val deleteNoteUseCase: DeleteNoteUseCase) : BaseViewModel<MainPageState, MainPageAction>() {
 
-    private val state: BehaviorSubject<MainPageState> = BehaviorSubject.create()
-    fun state(): Observable<MainPageState> = state.hide()
-
-    private val action: PublishSubject<MainPageAction> = PublishSubject.create()
-    fun action(): Observable<MainPageAction> = action.hide()
-
-    private val compositeDisposable = CompositeDisposable()
+    private var notes : ArrayList<NoteEntity> = arrayListOf()
 
     fun getAllNotes() {
         compositeDisposable += getNotesUseCase.getAll()
             .subscribe({
-                state.onNext(MainPageState.Content(it))
+                if(it.isEmpty()) {
+                    state.onNext(MainPageState.Empty)
+                } else {
+                    notes = ArrayList(it)
+                    state.onNext(MainPageState.Content(notes))
+                }
             }, {
                 state.onNext(MainPageState.Error)
                 Timber.e(it)
             })
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        compositeDisposable.dispose()
+    fun deleteItemAtPosition(adapterPosition: Int) {
+        if(adapterPosition == RecyclerView.NO_POSITION) return
+
+        compositeDisposable += deleteNoteUseCase.delete(notes[adapterPosition])
+            .subscribe({
+                if(it >= 0) {
+                    getAllNotes()
+                } else {
+                    state.onNext(MainPageState.Error)
+                    Timber.e("Error deleting item")
+                }
+            }, {
+                state.onNext(MainPageState.Error)
+                Timber.e(it)
+            })
     }
 }
 
@@ -40,6 +48,7 @@ sealed class MainPageState {
     object Loading : MainPageState()
     object Error : MainPageState()
     data class Content(val data : List<NoteEntity>) : MainPageState()
+    object Empty : MainPageState()
 }
 
 sealed class MainPageAction {
