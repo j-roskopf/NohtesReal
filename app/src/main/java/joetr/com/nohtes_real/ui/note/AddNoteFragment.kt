@@ -8,6 +8,8 @@ import android.view.*
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
+import androidx.core.view.children
+import androidx.core.view.minusAssign
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -46,8 +48,6 @@ class AddNoteFragment : BaseFragment(), LabelInteraction, EditorControlBar.Edito
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var viewModel: AddNoteViewModel
-
-    private val labelBottomSheet = LabelBottomSheet()
 
     private var noteEntity: NoteEntity? = null
 
@@ -125,7 +125,7 @@ class AddNoteFragment : BaseFragment(), LabelInteraction, EditorControlBar.Edito
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             R.id.addNoteLabel -> {
-                labelBottomSheet.show(childFragmentManager, LabelBottomSheet.TAG)
+                LabelBottomSheet().show(childFragmentManager, LabelBottomSheet.TAG)
             }
             R.id.addNoteSave -> {
                 hideKeyboard()
@@ -187,6 +187,14 @@ class AddNoteFragment : BaseFragment(), LabelInteraction, EditorControlBar.Edito
 
     override fun labelDeleted(label: LabelEntity) {
         viewModel.deleteLabel(label)
+
+        val chip = addNoteChipGroup.children.firstOrNull {
+            (it is Chip && it.text == label.label)
+        }
+
+        if(chip != null) {
+            addNoteChipGroup -= chip
+        }
     }
 
     private fun displayChips() {
@@ -196,7 +204,7 @@ class AddNoteFragment : BaseFragment(), LabelInteraction, EditorControlBar.Edito
 
             chip.text = it.label
             chip.setOnClickListener {
-                labelBottomSheet.show(childFragmentManager, LabelBottomSheet.TAG)
+                LabelBottomSheet().show(childFragmentManager, LabelBottomSheet.TAG)
             }
             addNoteChipGroup.addView(chip)
         }

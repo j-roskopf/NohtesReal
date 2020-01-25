@@ -28,7 +28,7 @@ abstract class BaseBottomSheetDialogFragment : BottomSheetDialogFragment() , Dag
 
     override fun onPause() {
         super.onPause()
-        compositeDisposable.dispose()
+        compositeDisposable.clear()
     }
 
     override fun onDestroy() {
