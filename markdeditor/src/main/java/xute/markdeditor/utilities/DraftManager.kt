@@ -50,8 +50,7 @@ class DraftManager {
                 is ImageComponentItem -> {
                     drafts.add(
                         getImageModel(
-                            view.downloadUrl,
-                            view.caption
+                            view.filePath
                         )
                     )
                 }
@@ -117,16 +116,13 @@ class DraftManager {
     /**
      * Models Image type object item.
      * @param downloadUrl  url of the image.
-     * @param caption      caption of the image(if any)
      * @return             a Image Model object type.
      */
     private fun getImageModel(
-        downloadUrl: String,
-        caption: String
+        downloadUrl: String
     ): DraftDataItemModel {
         val imageType = DraftDataItemModel()
         imageType.itemType = DraftModel.ITEM_TYPE_IMAGE
-        imageType.caption = caption
         imageType.downloadUrl = downloadUrl
         return imageType
     }

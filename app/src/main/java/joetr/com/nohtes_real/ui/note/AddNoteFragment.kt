@@ -1,12 +1,17 @@
 package joetr.com.nohtes_real.ui.note
 
+import android.Manifest
+import android.app.Activity
 import android.app.AlertDialog
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.*
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.core.view.minusAssign
@@ -34,9 +39,12 @@ import timber.log.Timber
 import xute.markdeditor.EditorControlBar
 import xute.markdeditor.Styles.TextComponentStyle.NORMAL
 import xute.markdeditor.models.DraftModel
+import xute.markdeditor.utilities.FilePathUtils
 import javax.inject.Inject
 
+
 const val NOTE_ARG = "note"
+private const val REQUEST_IMAGE_PERMISSION = 24
 
 class AddNoteFragment : BaseFragment(), LabelInteraction, EditorControlBar.EditorControlListener {
 
@@ -66,16 +74,6 @@ class AddNoteFragment : BaseFragment(), LabelInteraction, EditorControlBar.Edito
         viewModel = ViewModelProviders.of(this, viewModelFactory)[AddNoteViewModel::class.java]
 
         viewModel.getLabels()
-
-        compositeDisposable += viewModel.action()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(::handle) { Timber.e(it) }
-
-        compositeDisposable += viewModel.state()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(::render) { Timber.e(it) }
     }
 
     private fun render(addNoteState: AddNoteState) {
@@ -137,6 +135,16 @@ class AddNoteFragment : BaseFragment(), LabelInteraction, EditorControlBar.Edito
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        compositeDisposable += viewModel.action()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(::handle) { Timber.e(it) }
+
+        compositeDisposable += viewModel.state()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(::render) { Timber.e(it) }
 
         setupEditor()
     }
@@ -211,8 +219,55 @@ class AddNoteFragment : BaseFragment(), LabelInteraction, EditorControlBar.Edito
     }
 
     override fun onInsertImageClicked() {
-        //todo joe add image
+        openImageGallery()
     }
+
+    private fun openImageGallery() {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ),
+                REQUEST_IMAGE_PERMISSION
+            )
+        } else {
+            val intent = Intent()
+            intent.type = "image/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            startActivityForResult(intent, REQUEST_IMAGE_PERMISSION)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>, grantResults: IntArray) {
+        when (requestCode) {
+            REQUEST_IMAGE_PERMISSION -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openImageGallery()
+            } else {
+                //todo joe ask for explanation via snack bar
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if(requestCode == REQUEST_IMAGE_PERMISSION) {
+            if (resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
+                val uri = data.data;
+                val filePath = FilePathUtils.getPath(requireContext(), uri);
+                addImage(filePath);
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun addImage(filePath: String) {
+        editor.insertImage(filePath)
+    }
+
 
     override fun onInserLinkClicked() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(context)

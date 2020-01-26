@@ -37,8 +37,8 @@ abstract class BaseFragment : Fragment(), DaggerFragmentAware {
         )
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onDestroyView() {
+        super.onDestroyView()
         compositeDisposable.clear()
     }
 

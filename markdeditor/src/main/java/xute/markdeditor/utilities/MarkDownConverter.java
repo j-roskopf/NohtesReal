@@ -53,9 +53,8 @@ public class MarkDownConverter {
       } else if (view instanceof HorizontalDividerComponentItem) {
         stringBuilder.append(MarkDownFormat.getLineFormat());
       } else if (view instanceof ImageComponentItem) {
-        stringBuilder.append(MarkDownFormat.getImageFormat(((ImageComponentItem) view).getDownloadUrl()));
-        images.add(((ImageComponentItem) view).getDownloadUrl());
-        stringBuilder.append(MarkDownFormat.getCaptionFormat(((ImageComponentItem) view).getCaption()));
+        stringBuilder.append(MarkDownFormat.getImageFormat(((ImageComponentItem) view).getFilePath()));
+        images.add(((ImageComponentItem) view).getFilePath());
       }
     }
     dataProcessed = true;

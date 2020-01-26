@@ -94,6 +94,7 @@ dependencies {
 
     // mark down viewer
     implementation "io.noties.markwon:core:4.2.0"
+    implementation "io.noties.markwon:image:4.2.0"
 
     // epoxy
     implementation 'com.airbnb.android:epoxy:3.9.0'

@@ -87,7 +87,7 @@ class RenderingUtils {
      * Sets caption
      */
     private fun renderImage(item: DraftDataItemModel) {
-        markDEditor!!.insertImage(insertIndex, item.downloadUrl, true, item.caption)
+        markDEditor!!.insertImage(insertIndex, item.downloadUrl, true)
     }
 
     /**

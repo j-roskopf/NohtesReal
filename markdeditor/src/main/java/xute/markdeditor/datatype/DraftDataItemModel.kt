@@ -10,6 +10,5 @@ data class DraftDataItemModel(
     var mode: Int = 0,
     var style: Int = 0,
     var content: String? = null,
-    var downloadUrl: String? = null,
-    var caption: String? = null
+    var downloadUrl: String? = null
 ) : Parcelable

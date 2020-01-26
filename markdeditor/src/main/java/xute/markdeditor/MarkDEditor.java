@@ -379,7 +379,7 @@ public class MarkDEditor extends MarkDCore implements
     ComponentTag imageComponentTag = ComponentMetadataHelper.getNewComponentTag(insertIndex);
     imageComponentTag.setComponent(imageComponentModel);
     imageComponentItem.setTag(imageComponentTag);
-    imageComponentItem.setImageInformation(filePath, "");
+    imageComponentItem.setImageInformation(filePath);
     addView(imageComponentItem, insertIndex);
     reComputeTagsAfter(insertIndex);
     refreshViewOrder();
@@ -430,14 +430,14 @@ public class MarkDEditor extends MarkDCore implements
    *
    * @param filePath uri of image to be inserted.
    */
-  public void insertImage(int insertIndex, String filePath, boolean uploaded, String caption) {
+  public void insertImage(int insertIndex, String filePath, boolean uploaded) {
     ImageComponentItem imageComponentItem = __imageComponent.getNewImageComponentItem(this);
     //prepare tag
     ImageComponentModel imageComponentModel = new ImageComponentModel();
     ComponentTag imageComponentTag = ComponentMetadataHelper.getNewComponentTag(insertIndex);
     imageComponentTag.setComponent(imageComponentModel);
     imageComponentItem.setTag(imageComponentTag);
-    imageComponentItem.setImageInformation(filePath, caption);
+    imageComponentItem.setImageInformation(filePath);
     addView(imageComponentItem, insertIndex);
     reComputeTagsAfter(insertIndex);
   }
@@ -500,11 +500,6 @@ public class MarkDEditor extends MarkDCore implements
     }
     reComputeTagsAfter(removeIndex);
     refreshViewOrder();
-  }
-
-  @Override
-  public void onExitFromCaptionAndInsertNewTextComponent(int currentIndex) {
-    addTextComponent(currentIndex);
   }
 
   /**
