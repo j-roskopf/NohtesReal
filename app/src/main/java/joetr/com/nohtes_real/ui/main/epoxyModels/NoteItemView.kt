@@ -13,6 +13,7 @@ import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonPlugin
 import io.noties.markwon.image.ImagesPlugin
 import io.noties.markwon.image.data.DataUriSchemeHandler
+import io.noties.markwon.image.file.FileSchemeHandler
 import joetr.com.data.entities.NoteEntity
 import joetr.com.nohtes_real.R
 import joetr.com.nohtes_real.android.extensions.KotlinEpoxyHolder
@@ -30,15 +31,11 @@ abstract class NoteItemView : EpoxyModelWithHolder<NoteItemViewHolder>() {
     lateinit var actionHandler: MainActionHandler
 
     override fun bind(holder: NoteItemViewHolder) {
-        val x = Markwon.builder(holder.noteItemEditor.context).usePlugin(ImagesPlugin.create())
-            .usePlugin(object : AbstractMarkwonPlugin() {
-                override fun configure(registry: MarkwonPlugin.Registry) {
-                    registry.require(
-                        ImagesPlugin::class.java
-                    ) { imagesPlugin -> imagesPlugin.addSchemeHandler(DataUriSchemeHandler.create()) }
-                }
-            }).build()
-        x.setMarkdown(holder.noteItemEditor, noteEntity.markDown)
+        Markwon.builder(holder.noteItemEditor.context)
+            .usePlugin(ImagesPlugin.create { plugin -> plugin.addSchemeHandler(FileSchemeHandler.create())})
+            .build()
+           // .setMarkdown(holder.noteItemEditor,"![image](file:///storage/emulated/0/Download/dog-landing-hero-lg.jpg)")
+            .setMarkdown(holder.noteItemEditor, noteEntity.markDown)
 
         holder.noteItemBaseLayout.setOnClickListener {
             actionHandler(MainPageAction.NoteClicked(noteEntity))

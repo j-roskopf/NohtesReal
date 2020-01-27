@@ -23,6 +23,8 @@
         android:background="@drawable/blockquote_component_bg"
         android:id="@+id/text"
         android:textSize="16sp"
+        android:linksClickable="true"
+        android:autoLink="web|email"
         android:textColor="@color/textColor"
         android:textColorHint="@color/textColor"
         android:paddingLeft="4dp"

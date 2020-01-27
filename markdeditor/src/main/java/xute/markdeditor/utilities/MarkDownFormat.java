@@ -35,9 +35,9 @@ public class MarkDownFormat {
     }
     return String.format("\n%s%s\n", pref, content);
   }
-todo joe display images on main page
+
   public static String getImageFormat(String url) {
-    return String.format("\n<center>![Image](file://%s)</center>", url);
+    return String.format("\n![Image](file://%s)", url);
   }
 
   public static String getCaptionFormat(String caption) {

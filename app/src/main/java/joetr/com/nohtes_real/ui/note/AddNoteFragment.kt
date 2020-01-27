@@ -48,10 +48,6 @@ private const val REQUEST_IMAGE_PERMISSION = 24
 
 class AddNoteFragment : BaseFragment(), LabelInteraction, EditorControlBar.EditorControlListener {
 
-    // todo joe enable view binding
-    // todo joe add links
-    // todo joe add images
-
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
