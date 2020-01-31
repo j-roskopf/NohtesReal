@@ -241,14 +241,14 @@ public class MarkDEditor extends MarkDCore implements
     View viewToBeRemoved = getChildAt(selfIndex);
     View previousView = getChildAt(selfIndex - 1);
     String content = ((TextComponentItem) viewToBeRemoved).getInputBox().getText().toString();
-    if (previousView instanceof HorizontalDividerComponentItem) {
+    if (previousView instanceof HorizontalDividerComponentItem && content.isEmpty()) {
       //remove previous view.
       removeViewAt(selfIndex - 1);
       reComputeTagsAfter(selfIndex - 1);
       //focus on latest text component
       int lastTextComponent = getLatestTextComponentIndexBefore(selfIndex - 1);
       setFocus(getChildAt(lastTextComponent));
-    } else if (previousView instanceof TextComponentItem) {
+    } else if (previousView instanceof TextComponentItem && content.isEmpty()) {
       removeViewAt(selfIndex);
       int contentLen = ((TextComponentItem) previousView).getInputBox().getText().toString().length();
       ((TextComponentItem) previousView).getInputBox().append(String.format("%s", content));
