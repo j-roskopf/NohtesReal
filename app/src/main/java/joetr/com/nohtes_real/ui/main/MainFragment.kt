@@ -13,6 +13,9 @@ import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import io.noties.markwon.Markwon
+import io.noties.markwon.image.ImagesPlugin
+import io.noties.markwon.image.file.FileSchemeHandler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
@@ -38,9 +41,15 @@ class MainFragment : BaseFragment() {
 
     private val controller = MainController()
 
+    lateinit var markwon: Markwon
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProviders.of(this, viewModelFactory)[MainViewModel::class.java]
+
+        markwon = Markwon.builder(requireContext())
+            .usePlugin(ImagesPlugin.create { plugin -> plugin.addSchemeHandler(FileSchemeHandler.create())})
+            .build()
     }
 
     override fun onCreateView(
@@ -162,7 +171,7 @@ class MainFragment : BaseFragment() {
                 mainBaseLayout.displayedChild = R.id.mainErrorContainer
             }
             is MainPageState.Content -> {
-                controller.setData(state.data, ::handle)
+                controller.setData(state.data, ::handle, markwon)
                 mainBaseLayout.displayedChild = R.id.mainContentContainer
 
                 // show the RV

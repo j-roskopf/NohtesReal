@@ -2,7 +2,6 @@ package joetr.com.nohtes_real
 
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -25,12 +24,12 @@ class MainActivity : BaseActivity() {
 
         // trigger so pre population happens
         compositeDisposable += AppDatabase.getInstance(this).labelDao().getAll().subscribeOn(
-            Schedulers.io()).subscribe()
+                Schedulers.io()).subscribe()
 
         val navController = findNavController(R.id.nav_host_fragment)
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         findViewById<Toolbar>(R.id.toolbar)
-            .setupWithNavController(navController, appBarConfiguration)
+                .setupWithNavController(navController, appBarConfiguration)
     }
 
     override fun injectSelf(component: ActivityComponent) = component.inject(this)

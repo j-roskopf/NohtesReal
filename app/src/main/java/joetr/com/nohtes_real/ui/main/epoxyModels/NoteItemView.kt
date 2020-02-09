@@ -6,6 +6,7 @@ import androidx.cardview.widget.CardView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
+import joetr.com.nohtes_real.android.extensions.KotlinEpoxyHolder
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import io.noties.markwon.AbstractMarkwonPlugin
@@ -16,7 +17,6 @@ import io.noties.markwon.image.data.DataUriSchemeHandler
 import io.noties.markwon.image.file.FileSchemeHandler
 import joetr.com.data.entities.NoteEntity
 import joetr.com.nohtes_real.R
-import joetr.com.nohtes_real.android.extensions.KotlinEpoxyHolder
 import joetr.com.nohtes_real.ui.main.MainActionHandler
 import joetr.com.nohtes_real.ui.main.MainPageAction
 
@@ -30,12 +30,11 @@ abstract class NoteItemView : EpoxyModelWithHolder<NoteItemViewHolder>() {
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     lateinit var actionHandler: MainActionHandler
 
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    lateinit var markwon: Markwon
+
     override fun bind(holder: NoteItemViewHolder) {
-        Markwon.builder(holder.noteItemEditor.context)
-            .usePlugin(ImagesPlugin.create { plugin -> plugin.addSchemeHandler(FileSchemeHandler.create())})
-            .build()
-           // .setMarkdown(holder.noteItemEditor,"![image](file:///storage/emulated/0/Download/dog-landing-hero-lg.jpg)")
-            .setMarkdown(holder.noteItemEditor, noteEntity.markDown)
+        markwon.setMarkdown(holder.noteItemEditor, noteEntity.markDown)
 
         holder.noteItemBaseLayout.setOnClickListener {
             actionHandler(MainPageAction.NoteClicked(noteEntity))
